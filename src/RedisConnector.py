@@ -8,7 +8,7 @@ class RedisConnector:
         self._host = self._yaml[END_POINT]
         self._password = self._yaml[PASSWORD]
         self._port = self._yaml[PORT]
-        self._redis = self.connect(dbname)
+       # self._redis = self.connect(dbname)
 
     def connect(self, dbname): 
         pool = redis.ConnectionPool(host=self._host, 
