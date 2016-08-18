@@ -15,10 +15,11 @@ class User(RedisConnector):
         return self._user.get(self.ID)
 
     def addUser(self):
+        # incr is always incrementing. Let's say one say not present and it
+        # got wrong
         self._user.incr(self.ID)
         userData = {"username": self._username, 
                     "password": self._password}
-        print("ID: " + self._getCurrentID() )
         self._user.hmset("user:" + self._getCurrentID(), userData) 
         self.populateUsername() 
 
@@ -27,21 +28,20 @@ class User(RedisConnector):
         self._user.hset("users", self._username, self._getCurrentID())
 
     def getUserID(self): 
-        print self._user.hget("users", self._username)
+        return self._user.hget("users", self._username)
 
-    def getPwd(self): 
-        print self._user.hmget("user:" + self.getUserID(), password)
+    def getPwd(self, usrID): 
+        return self._user.hmget("user:" + usrID, "password")
 
-    def authenticate(self): 
-        # get username from user
-        self.getUserID() 
-        print self._password
-        return self.getPwd() == self._password
+    def auth(self): 
+        usrID = self.getUserID()
+        pwd = self.getPwd(usrID)
+        return "".join(pwd) == self._password
 
 def main(): 
     usr = User("htut", "htaywin")
     usr.addUser()
-    usr2 = User("wint", "hnin") 
+    usr2 = User("hello", "hnin") 
     usr2.addUser() 
 
 if __name__ == "__main__": 
