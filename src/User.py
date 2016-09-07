@@ -6,7 +6,6 @@ class User(RedisConnector):
     ID = "user_id"
     def __init__(self, username, password): 
         RedisConnector.__init__(self)
-        # ._user is redis instance
         self._user = self.connect()
         self._username = username
         self._password = password
@@ -15,8 +14,6 @@ class User(RedisConnector):
         return self._user.get(self.ID)
 
     def addUser(self):
-        # incr is always incrementing. Let's say one say not present and it
-        # got wrong
         self._user.incr(self.ID)
         userData = {"username": self._username, 
                     "password": self._password}
